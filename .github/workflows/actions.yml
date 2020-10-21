@@ -38,23 +38,20 @@ jobs:
         rm -rf *.out
         go test -v -race -covermode atomic -coverprofile coverage.out ./...
 
-    # - name: Upload coverage to Codecov
+    - name: Install goveralls
+      env:
+        GO111MODULE: off
+      run: go get github.com/mattn/goveralls
+
+    - name: Report Coverage
+      env:
+        COVERALLS_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      run: goveralls -coverprofile=coverage.out -service=github-actions -flagname=unittest -v
+        
+    # - name: Report Codecov
     #   uses: codecov/codecov-action@v1
     #   with:
     #     token: ${{ secrets.CODECOV_TOKEN }}
-
-    # - name: Install goveralls
-    #   env:
-    #     GO111MODULE: off
-    #   run: go get github.com/mattn/goveralls
-
-    - name: Report coverage
-      uses: codecov/codecov-action@v1
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-      # env:
-      #   COVERALLS_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      # run: goveralls -coverprofile=coverage.out -service=github
       # uses: codecov/codecov-action@v1
       # -------------------------------------
       # uses: ./
