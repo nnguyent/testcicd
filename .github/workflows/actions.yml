@@ -1,4 +1,4 @@
-name: Go # Name of action build
+name: build # Name of action build
 
 on: # Declare event type, branch to trigger actions
   push:
