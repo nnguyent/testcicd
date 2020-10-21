@@ -49,12 +49,14 @@ jobs:
       run: go get github.com/mattn/goveralls
 
     - name: Report coverage
-      env:
-        COVERALLS_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      run: goveralls -coverprofile=coverage.out -service=github
-      # uses: codecov/codecov-action@v1
-      # with:
-      #   token: ${{ secrets.CODECOV_TOKEN }}
-      #   file: coverage.out
-      #   flags: unittests
+      # env:
+      #   COVERALLS_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      # run: goveralls -coverprofile=coverage.out -service=github
+      - uses: actions/checkout@master
+      - uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: ./coverage.out
+        flags: unittests
       #   name: codecov-go${{ matrix.go }}-${{ matrix.os }}
+        verbose: true # optional (default = false)
