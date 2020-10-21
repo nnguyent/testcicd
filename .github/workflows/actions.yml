@@ -34,8 +34,8 @@ jobs:
         go build -v -o dist/testcicd .
 
     - name: Test
-        run: |
-          go test -v ./...
+      run: |
+        go test -v ./...
 
     - name: Coverage
       run: |
