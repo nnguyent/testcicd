@@ -52,11 +52,12 @@ jobs:
       # env:
       #   COVERALLS_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       # run: goveralls -coverprofile=coverage.out -service=github
-      - uses: actions/checkout@master
-      - uses: codecov/codecov-action@v1
+      uses: codecov/codecov-action@v1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         file: ./coverage.out
         flags: unittests
+        fail_ci_if_error: true
+        path_to_write_report: ./codecov_report.gz
       #   name: codecov-go${{ matrix.go }}-${{ matrix.os }}
         verbose: true # optional (default = false)
