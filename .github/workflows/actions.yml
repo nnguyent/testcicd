@@ -43,6 +43,11 @@ jobs:
     #   with:
     #     token: ${{ secrets.CODECOV_TOKEN }}
 
+    - name: Install goveralls
+      env:
+        GO111MODULE: off
+      run: go get github.com/mattn/goveralls
+
     - name: Report coverage
       env:
         COVERALLS_TOKEN: ${{ secrets.CODECOV_TOKEN }}
