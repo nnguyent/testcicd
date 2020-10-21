@@ -28,22 +28,16 @@ jobs:
             dep ensure
         fi
         go get -v github.com/mattn/goveralls
-        go install -v github.com/mattn/goveralls
 
     - name: Build
       run: |
-        mkdir -p dist; rm -rf dist/*
-        go build -v -o dist/testcicd .
+        mkdir -p bin; rm -rf bin/*
+        go build -v -o bin/testcicd .
 
     - name: Test
       run: |
         rm -rf *.out
         go test -v -race -covermode atomic -coverprofile coverage.out ./...
-
-    - name: Set up GOPATH
-      run: |
-        echo "GOPATH=${{ github.workspace }}" >> "$GITHUB_ENV"
-        echo "${{ github.workspace }}/bin" >> "$GITHUB_PATH"
 
     # - name: Install goveralls
     #   env:
@@ -51,10 +45,10 @@ jobs:
     #   run: go get github.com/mattn/goveralls
 
     - name: Report Coverage
-      # env:
-      #   COVERALLS_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      run: goveralls -v -service=github-actions -repotoken=${{ secrets.CODECOV_TOKEN }} -coverprofile=coverage.out -flagname=unittest -v
-      # working-directory: ./ # add this
+      env:
+        COVERALLS_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      run: goveralls -v -service=github-actions -coverprofile=coverage.out -flagname=unittest
+      # run: goveralls -v -service=github-actions -repotoken=${{ secrets.CODECOV_TOKEN }} -coverprofile=coverage.out -flagname=unittest
 
     # - name: Report Codecov
     #   uses: codecov/codecov-action@v1
