@@ -27,6 +27,8 @@ jobs:
             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
             dep ensure
         fi
+        go get -v github.com/mattn/goveralls
+        go install -v github.com/mattn/goveralls
 
     - name: Build
       run: |
@@ -38,16 +40,22 @@ jobs:
         rm -rf *.out
         go test -v -race -covermode atomic -coverprofile coverage.out ./...
 
-    - name: Install goveralls
-      env:
-        GO111MODULE: off
-      run: go get github.com/mattn/goveralls
+    - name: Set up GOPATH
+      run: |
+        echo "GOPATH=${{ github.workspace }}" >> "$GITHUB_ENV"
+        echo "${{ github.workspace }}/bin" >> "$GITHUB_PATH"
+
+    # - name: Install goveralls
+    #   env:
+    #     GO111MODULE: off
+    #   run: go get github.com/mattn/goveralls
 
     - name: Report Coverage
-      env:
-        COVERALLS_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      run: goveralls -coverprofile=coverage.out -service=github-actions -flagname=unittest -v
-        
+      # env:
+      #   COVERALLS_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      run: goveralls -v -service=github-actions -repotoken=${{ secrets.CODECOV_TOKEN }} -coverprofile=coverage.out -flagname=unittest -v
+      # working-directory: ./ # add this
+
     # - name: Report Codecov
     #   uses: codecov/codecov-action@v1
     #   with:
