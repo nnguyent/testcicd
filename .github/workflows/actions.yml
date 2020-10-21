@@ -38,15 +38,18 @@ jobs:
         rm -rf *.out
         go test -race -covermode atomic -coverprofile=coverage.out -v ./...
 
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
+    # - name: Upload coverage to Codecov
+    #   uses: codecov/codecov-action@v1
+    #   with:
+    #     token: ${{ secrets.CODECOV_TOKEN }}
 
     - name: Report coverage
-      uses: codecov/codecov-action@v1
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        file: coverage.out
-        flags: unittests
-        name: codecov-go${{ matrix.go }}-${{ matrix.os }}
+      env:
+        COVERALLS_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      run: goveralls -coverprofile=coverage.out -service=github
+      # uses: codecov/codecov-action@v1
+      # with:
+      #   token: ${{ secrets.CODECOV_TOKEN }}
+      #   file: coverage.out
+      #   flags: unittests
+      #   name: codecov-go${{ matrix.go }}-${{ matrix.os }}
