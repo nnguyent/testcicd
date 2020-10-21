@@ -8,6 +8,7 @@ on: # Declare event type, branch to trigger actions
 
 jobs:
   build:
+    needs: [test]
     name: Build
     runs-on: ubuntu-latest
     steps:
@@ -33,14 +34,15 @@ jobs:
         mkdir -p dist; rm -rf dist/*
         go build -v -o dist/testcicd .
     
-    - name: Test
-      run: |
-        go test -v ./...
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test
+        run: |
+          go test -v ./...
+      - name: Coverage
+        run: |
+          rm -rf *.out
+          go test -coverprofile=coverage.out -v ./...
 
-    - name: Coverage
-      run: |
-        rm -rf *.out
-        go test -coverprofile=coverage.out -v ./...
-
-    - name: Test
-      run: go test -v .
