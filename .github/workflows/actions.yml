@@ -35,14 +35,18 @@ jobs:
 
     - name: Test
       run: |
-        go test -v ./...
-
-    - name: Coverage
-      run: |
         rm -rf *.out
-        go test -coverprofile=coverage.out -v ./...
+        go test -race -covermode atomic -coverprofile=coverage.out -v ./...
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
+
+    - name: Report coverage
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: coverage.out
+        flags: unittests
+        name: codecov-go${{ matrix.go }}-${{ matrix.os }}
