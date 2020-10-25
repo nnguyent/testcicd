@@ -1,5 +1,6 @@
 package main
 
-func sum(a, b int) int {
+// Sum -
+func Sum(a, b int) int {
 	return a + b
 }
